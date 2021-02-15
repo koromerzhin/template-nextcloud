@@ -1,0 +1,66 @@
+version: "3.4"
+
+volumes: 
+  database:
+
+networks:
+  proxynetwork:
+    external: true
+  net:
+    driver: overlay
+    attachable: true
+
+services:
+  phpmyadmin:
+    image: phpmyadmin:5.0.2
+    environment:
+      PMA_HOST: mariadb
+      MYSQL_ROOT_PASSWORD: example
+    depends_on:
+      - mariadb
+    networks:
+      - net
+      - proxynetwork
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.phpmyadmin-nextcloud.rule=Host(`phpmyadmin-nextcloud.traefik.me`)"
+        - "traefik.http.routers.phpmyadmin-nextcloud-tls.tls.domains[0].main=phpmyadmin-nextcloud.traefik.me"
+        - "traefik.http.routers.phpmyadmin-nextcloud-tls.tls.domains[0].sans=phpmyadmin-nextcloud-*.traefik.me"
+        - "traefik.http.services.phpmyadmin-nextcloud.loadbalancer.server.port=80"
+  mariadb:
+    image: mariadb:10.5.8
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: passwordDB
+      TZ: Europe/Paris
+    volumes:
+      - database:/var/lib/mysql
+    deploy:
+      labels:
+        - "traefik.enable=false"
+    networks:
+      - net
+  www:
+    image: nextcloud:17.0.0-apache
+    environment:
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_PASSWORD=passwordDB
+      - MYSQL_HOST=mariadb
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD=password
+    networks:
+      - net
+      - proxynetwork
+    depends_on:
+      - mariadb
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.traefik.me`)"
+        - "traefik.http.routers.nextcloud-tls.tls.domains[0].main=nextcloud.traefik.me"
+        - "traefik.http.routers.nextcloud-tls.tls.domains[0].sans=nextcloud-*.traefik.me"
+        - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
