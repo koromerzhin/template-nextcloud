@@ -1,7 +1,8 @@
 version: "3.4"
 
 volumes: 
-  database:
+  nextcloud_data:
+  mariadb_data:
 
 networks:
   proxynetwork:
@@ -37,14 +38,14 @@ services:
       MYSQL_PASSWORD: passwordDB
       TZ: Europe/Paris
     volumes:
-      - database:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     deploy:
       labels:
         - "traefik.enable=false"
     networks:
       - net
   www:
-    image: nextcloud:17.0.0-apache
+    image: nextcloud:20.0.7-apache
     environment:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
@@ -55,6 +56,9 @@ services:
     networks:
       - net
       - proxynetwork
+    volumes:
+        - nextcloud_data:/var/www/html/data
+        - ${PWD}/config:/var/www/html/config
     depends_on:
       - mariadb
     deploy:

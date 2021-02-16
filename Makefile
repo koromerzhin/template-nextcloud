@@ -29,7 +29,12 @@ package-lock.json: package.json
 node_modules: package-lock.json
 	@npm install
 
-install: node_modules ## Installation application
+config:
+	@mkdir config
+
+folders: config
+
+install: folders node_modules ## Installation application
 	@make docker image-pull
 	@make docker deploy
 
@@ -78,7 +83,7 @@ else ifeq ($(COMMAND_ARGS),deploy)
 else ifeq ($(COMMAND_ARGS),image-pull)
 	@docker image pull mariadb:10.5.8
 	@docker image pull phpmyadmin:5.0.2
-	@docker image pull nextcloud:17.0.0-apache
+	@docker image pull nextcloud:20.0.7-apache
 else ifeq ($(COMMAND_ARGS),ls)
 	@docker stack services $(STACK)
 else ifeq ($(COMMAND_ARGS),stop)
