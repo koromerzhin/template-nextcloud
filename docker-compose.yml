@@ -1,6 +1,6 @@
 version: "3.4"
 
-volumes: 
+volumes:
   nextcloud_data:
   mariadb_data:
 
@@ -58,7 +58,7 @@ services:
       - net
       - proxynetwork
     volumes:
-        - nextcloud_data:/var/www/html/data
+      - nextcloud_data:/var/www/html/data
     depends_on:
       - mariadb
     deploy:
