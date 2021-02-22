@@ -1,6 +1,6 @@
 version: "3.4"
 
-volumes: 
+volumes:
   nextcloud_data:
   mariadb_data:
 
@@ -13,7 +13,7 @@ networks:
 
 services:
   phpmyadmin:
-    image: phpmyadmin:5.0.2
+    image: phpmyadmin:5.0.4
     environment:
       PMA_HOST: mariadb
       MYSQL_ROOT_PASSWORD: example
@@ -58,7 +58,7 @@ services:
       - net
       - proxynetwork
     volumes:
-        - nextcloud_data:/var/www/html/data
+      - nextcloud_data:/var/www/html/data
     depends_on:
       - mariadb
     deploy:
