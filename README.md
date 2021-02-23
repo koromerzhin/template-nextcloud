@@ -29,6 +29,7 @@ docker swarm
 Hosts:
 
 - nextcloud.traefik.me
+- phpmyadmin-nextcloud.traefik.me
 
 ## Install
 

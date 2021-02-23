@@ -30,7 +30,6 @@ node_modules: package-lock.json
 	@npm install
 
 install: node_modules ## Installation application
-	@make docker image-pull -i
 	@make docker deploy -i
 
 .PHONY: isdocker
@@ -76,10 +75,6 @@ ifeq ($(COMMAND_ARGS),create-network)
 	@docker network create --driver=overlay $(NETWORK)
 else ifeq ($(COMMAND_ARGS),deploy)
 	@docker stack deploy -c docker-compose.yml $(STACK)
-else ifeq ($(COMMAND_ARGS),image-pull)
-	@docker image pull mariadb:10.5.9
-	@docker image pull phpmyadmin:5.0.4
-	@docker image pull nextcloud:20.0.7-apache
 else ifeq ($(COMMAND_ARGS),ls)
 	@docker stack services $(STACK)
 else ifeq ($(COMMAND_ARGS),stop)
@@ -91,7 +86,6 @@ else
 	@echo "---"
 	@echo "create-network: create network"
 	@echo "deploy: deploy"
-	@echo "image-pull: Get docker image"
 	@echo "ls: docker service"
 	@echo "stop: docker stop"
 endif
