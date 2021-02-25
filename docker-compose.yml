@@ -39,6 +39,7 @@ services:
       TZ: Europe/Paris
     volumes:
       - mariadb_data:/var/lib/mysql
+      - ${PWD}/dump:/dump
     deploy:
       labels:
         - "traefik.enable=false"
