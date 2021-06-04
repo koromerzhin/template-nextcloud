@@ -46,7 +46,7 @@ services:
     networks:
       - net
   www:
-    image: nextcloud:21.0.1-apache
+    image: nextcloud:21.0.2-apache
     environment:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
