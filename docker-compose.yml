@@ -25,7 +25,7 @@ services:
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.phpmyadmin-nextcloud.rule=Host(`phpmyadmin-nextcloud.traefik.me`)"
+        - "traefik.http.routers.phpmyadmin-nextcloud.rule=HostRegexp(`phpmyadmin-nextcloud.traefik.me`, `phpmyadmin-nextcloud.{ip:.*}.traefik.me`)"
         - "traefik.http.routers.phpmyadmin-nextcloud-tls.tls.domains[0].main=phpmyadmin-nextcloud.traefik.me"
         - "traefik.http.routers.phpmyadmin-nextcloud-tls.tls.domains[0].sans=phpmyadmin-nextcloud-*.traefik.me"
         - "traefik.http.services.phpmyadmin-nextcloud.loadbalancer.server.port=80"
@@ -65,7 +65,7 @@ services:
     deploy:
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.traefik.me`)"
+        - "traefik.http.routers.nextcloud.rule=HostRegexp(`nextcloud.traefik.me`, `nextcloud.{ip:.*}.traefik.me`)"
         - "traefik.http.routers.nextcloud-tls.tls.domains[0].main=nextcloud.traefik.me"
         - "traefik.http.routers.nextcloud-tls.tls.domains[0].sans=nextcloud-*.traefik.me"
         - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
